@@ -174,7 +174,6 @@ public class RecipeSearch extends JFrame implements ActionListener, Ruta{
 			query += "\"Ingrediens\" = '"+ Inteingrediens[Inteingrediens.length - 1] + "')";
 		}
 		query += ";";
-		System.out.println(query);
 		return Fetch.fetching(query);
 	}
 
