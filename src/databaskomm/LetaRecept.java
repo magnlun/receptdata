@@ -9,7 +9,7 @@ public class LetaRecept {
 				+ recept + "%" + "';";
 		String[][] retur;
 		try {
-			retur = Hämta.hämtning(query);
+			retur = Fetch.fetching(query);
 			String[] del1 = new String[retur.length - 1];
 			for (int i = 1; i < retur.length; i++) {
 				del1[i-1] = retur[i][0];

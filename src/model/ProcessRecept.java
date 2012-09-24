@@ -8,9 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.TreeSet;
 
-import userInterface.SkapaInköpslista;
+import userInterface.CreateBuylist;
 
-import databaskomm.Hämta;
+import databaskomm.Fetch;
 
 public class ProcessRecept {
 	public static void takeData(TreeSet<String> Recept, TreeSet<String> ingredienser){
@@ -18,7 +18,7 @@ public class ProcessRecept {
 			String query = "SELECT \"Ingrediens\" FROM \"Innehall\" WHERE\n" +
 					"\"BakNamn\" = '"+ recept +"';";
 			try{
-				String[][] ingrediens = Hämta.hämtning(query);
+				String[][] ingrediens = Fetch.fetching(query);
 				for(int i = 1; i < ingrediens.length; i++){
 					ingredienser.add(ingrediens[i][0]);
 				}
@@ -52,6 +52,6 @@ public class ProcessRecept {
 		catch(Exception err){
 			err.printStackTrace();
 		}
-		new SkapaInköpslista(ingredienser);
+		new CreateBuylist(ingredienser);
 	}
 }

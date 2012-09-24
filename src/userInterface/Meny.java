@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import komponenter.FetchPassword;
 import komponenter.button;
 
 import model.Connect;
-import model.Lösenord;
 
 
 
@@ -57,8 +57,8 @@ public class Meny extends JFrame implements ActionListener{
 	}
 	
 	public static void main(String[] args){
-		Lösenord.putName("my.nada.kth.se","magnlun");
-		Lösenord.putName("jdbc:postgresql://127.0.0.1:5432/Recept","postgres");
+		FetchPassword.putName("my.nada.kth.se","magnlun");
+		FetchPassword.putName("jdbc:postgresql://127.0.0.1:5432/Recept","postgres");
 		new Meny();
 	}
 

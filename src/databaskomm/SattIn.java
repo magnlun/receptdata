@@ -120,8 +120,8 @@ public class SattIn {
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.executeUpdate();
 		} catch (SQLException sqle) {
-			String[][] Alias = Hämta
-					.hämtning("SELECT \"Ingrediens\" FROM \"Alias\" WHERE \"Alias\" = '"
+			String[][] Alias = Fetch
+					.fetching("SELECT \"Ingrediens\" FROM \"Alias\" WHERE \"Alias\" = '"
 							+ ingrediens + "';");
 			if (Alias.length > 1) {
 				query = query.replace(",'" + ingrediens, ",'" + Alias[1][0]);
@@ -153,8 +153,8 @@ public class SattIn {
 			pstmt.executeUpdate();
 		}
 		catch (SQLException sqle) {
-			String[][] Alias = Hämta
-					.hämtning("SELECT \"Ingrediens\" FROM \"Alias\" WHERE \"Alias\" = '"
+			String[][] Alias = Fetch
+					.fetching("SELECT \"Ingrediens\" FROM \"Alias\" WHERE \"Alias\" = '"
 							+ ingrediens + "';");
 			if (Alias.length > 1) {
 				query = query.replace(",'" + ingrediens, ",'" + Alias[1][0]);

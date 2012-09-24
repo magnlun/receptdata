@@ -5,7 +5,7 @@ import javax.swing.JButton;
 import userInterface.FasInput;
 import userInterface.Inköpslista;
 import userInterface.SkrivUtKokbok;
-import userInterface.receptSök;
+import userInterface.RecipeSearch;
 
 import model.LaggTillBild;
 import model.Ruta;
@@ -19,7 +19,7 @@ public class button extends JButton {
 	 */
 	private static final long serialVersionUID = 7407099534132391221L;
 	static Ruta[] list = { new FasInput(), new SkrivUtRecept(),
-			new SkrivUtKokbok(), new skrivPDF(), new receptSök(),
+			new SkrivUtKokbok(), new skrivPDF(), new RecipeSearch(),
 			new TaBortFrame(), new LaggTillBild(), new Inköpslista() };
 	int index;
 

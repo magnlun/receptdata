@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 
 import komponenter.button;
 
-import userInterface.ReceptVäljare;
+import userInterface.RecipeChooser;
 
 import databaskomm.SattInBild;
 
@@ -18,7 +18,7 @@ public class LaggTillBild implements Ruta, ReceptMottagare{
 	
 	JFrame ruta;
 	public LaggTillBild(){
-		ruta = new ReceptVäljare(this);
+		ruta = new RecipeChooser(this);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class LaggTillBild implements Ruta, ReceptMottagare{
 	}
 
 	@Override
-	public void taRecept(String recept, ReceptVäljare ruta) {
+	public void taRecept(String recept, RecipeChooser ruta) {
 		sattIn(recept, ruta);
 		button.changeList(new LaggTillBild());
 		skrivPDF.skriv();

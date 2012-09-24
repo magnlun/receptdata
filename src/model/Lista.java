@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 import komponenter.DropDownList;
 
-import databaskomm.Hämta;
+import databaskomm.Fetch;
 
 
 public class Lista extends ArrayList<DropDownList> {
@@ -22,8 +22,8 @@ public class Lista extends ArrayList<DropDownList> {
 
 	public Lista() {
 		try {
-			String[][] kategorier = Hämta
-					.hämtning("SELECT * FROM \"Kategorier\";");
+			String[][] kategorier = Fetch
+					.fetching("SELECT * FROM \"Kategorier\";");
 			for (int i = 1; i < kategorier.length; i++)
 
 				this.kategorier.add(kategorier[i][0].replace("  ", ""));

@@ -6,8 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import model.Lösenord;
-
+import komponenter.FetchPassword;
 import komponenter.Password;
 
 
@@ -19,11 +18,11 @@ public class Connect {
 		String[] namn = {"Databas"};
 		for(int i = 0 ; i < anslutningar.length; i++){
 			String connstr = anslutningar[i];
-			String username = Lösenord.fetchName(connstr);
-			String password = Lösenord.fetchPassword(connstr);
+			String username = FetchPassword.fetchName(connstr);
+			String password = FetchPassword.fetchPassword(connstr);
 			if (password.equals(""))
 				password = Password.lösenord(connstr, username);
-			Lösenord.putPassword(connstr, password);
+			FetchPassword.putPassword(connstr, password);
 			try {
 				Class.forName("org.postgresql.Driver");
 			} catch (ClassNotFoundException cnfe) {
@@ -32,9 +31,9 @@ public class Connect {
 			try {
 				conn.put(namn[i], DriverManager.getConnection(connstr, username, password));
 			} catch (SQLException e) {
-				Lösenord.removePassword(connstr);
-				Lösenord.removeName(connstr);
-				Lösenord.fetchName(connstr);
+				FetchPassword.removePassword(connstr);
+				FetchPassword.removeName(connstr);
+				FetchPassword.fetchName(connstr);
 				i--;
 				continue;
 			}

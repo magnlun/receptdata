@@ -7,7 +7,7 @@ public class SkrivUt {
 			throws SQLException {
 		String query = "SELECT \"Portioner\" FROM \"Bakverk\" WHERE \"BakNamn\" = '"
 				+ recept + "';";
-		String[][] temp = Hämta.hämtning(query);
+		String[][] temp = Fetch.fetching(query);
 		float portion = 1;
 		if (portioner != 0)
 			portion = Integer.parseInt(temp[1][0]) / (float) portioner;
@@ -20,7 +20,7 @@ public class SkrivUt {
 				"AND \"Innehall\".\"Fas\" = \"Alternativ\".\"Fas\" " +
 				"WHERE \"Innehall\".\"BakNamn\" = '"
 				+ recept + "';";
-		String[][] rc = Hämta.hämtning(query);
+		String[][] rc = Fetch.fetching(query);
 		if (rc.length < 2) {
 			System.out.println("Tyvärr hittade jag inte det där");
 			return null;

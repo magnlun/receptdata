@@ -18,7 +18,7 @@ public class FileWrite {
 		String recept = sc.nextLine();
 		if(recept.endsWith("*") || recept.startsWith("*")){
 			String query = "SELECT \"BakNamn\" FROM \"Bakverk\" WHERE \"BakNamn\" LIKE '"+recept.replace('*', '%')+"';";
-			String[][] rc = Hämta.hämtning(query);
+			String[][] rc = Fetch.fetching(query);
 			if(rc.length == 2)
 				recept = rc[1][0];
 			if(rc.length > 2){
@@ -32,7 +32,7 @@ public class FileWrite {
 
 		}
 		String query = "SELECT  \"Innehall\".\"Ingrediens\", \"Innehall\".\"Volym\", \"Alternativ\".\"AltIngrediens\", \"Alternativ\".\"Volym\",  \"Instruktioner\" FROM \"Innehall\" NATURAL JOIN \"Bakverk\" LEFT JOIN \"Alternativ\" ON \"Innehall\".\"Ingrediens\" = \"Alternativ\".\"Ingrediens\" AND \"Innehall\".\"BakNamn\" = \"Alternativ\".\"Recept\" WHERE \"Innehall\".\"BakNamn\" = '" + recept + "';";
-		String[][] rc = Hämta.hämtning(query);
+		String[][] rc = Fetch.fetching(query);
 		if(rc.length < 2){
 			System.out.println("Tyvärr hittade jag inte det där");
 		}

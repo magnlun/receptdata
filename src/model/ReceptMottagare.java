@@ -1,8 +1,8 @@
 package model;
 
-import userInterface.ReceptVäljare;
+import userInterface.RecipeChooser;
 
 public interface ReceptMottagare {
 
-	public void taRecept(String recept, ReceptVäljare ruta);
+	public void taRecept(String recept, RecipeChooser ruta);
 }

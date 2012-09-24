@@ -10,7 +10,7 @@ import java.awt.print.PrinterJob;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import userInterface.receptFönstret;
+import userInterface.RecipeWindow;
 
 import databaskomm.SkrivUt;
 
@@ -21,16 +21,16 @@ public class SkrivUtAllt implements Printable {
 
 	public void skriv(String[] recept) {
 		this.recept = recept;
-		receptFönstret[] receptFönster = new receptFönstret[recept.length];
+		RecipeWindow[] receptFönster = new RecipeWindow[recept.length];
 		for (int i = 0; i < recept.length; i++) {
 			try {
-				receptFönster[i] = new receptFönstret(SkrivUt.skriv(recept[i],
+				receptFönster[i] = new RecipeWindow(SkrivUt.skriv(recept[i],
 						0), recept[i], false);
 			} catch (Exception err) {
 				err.printStackTrace();
 			}
 		}
-		for(receptFönstret fönster : receptFönster){
+		for(RecipeWindow fönster : receptFönster){
 			pages.addAll(fönster.utskrift());
 		}
 		pages.add(null);

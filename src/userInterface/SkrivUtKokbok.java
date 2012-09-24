@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import databaskomm.LetaRecept;
-import databaskomm.SökEfterDatum;
+import databaskomm.SearchForDate;
 
 import model.Kalender;
 import model.Ruta;
@@ -63,7 +63,7 @@ public class SkrivUtKokbok extends JFrame implements Ruta, ActionListener{
 				
 				for(int i = 0; i < 5; i++)
 					tid += (char) read.read();
-				recept = SökEfterDatum.sök(datum, tid);
+				recept = SearchForDate.sök(datum, tid);
 				read.close();
 			}
 			catch(Exception err){

@@ -1,17 +1,17 @@
 package model;
 
 import komponenter.button;
-import userInterface.ReceptVäljare;
-import userInterface.receptFönstret;
+import userInterface.RecipeChooser;
+import userInterface.RecipeWindow;
 
 import databaskomm.SkrivUt;
 
 public class SkrivUtRecept implements ReceptMottagare, Ruta {
 
-	ReceptVäljare ruta;
+	RecipeChooser ruta;
 
 	public SkrivUtRecept() {
-		ruta = new ReceptVäljare(this, true);
+		ruta = new RecipeChooser(this, true);
 	}
 	
 	
@@ -21,9 +21,9 @@ public class SkrivUtRecept implements ReceptMottagare, Ruta {
 	}
 
 	@Override
-	public void taRecept(String recept, ReceptVäljare ruta) {
+	public void taRecept(String recept, RecipeChooser ruta) {
 		try {
-			new receptFönstret(SkrivUt.skriv(recept, ruta.portioner()), recept);
+			new RecipeWindow(SkrivUt.skriv(recept, ruta.portioner()), recept);
 			ruta.dispose();
 			button.changeList(new SkrivUtRecept());
 		} catch (Exception e1) {

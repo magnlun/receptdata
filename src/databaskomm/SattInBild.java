@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import komponenter.FetchPassword;
 import komponenter.Password;
 
 
@@ -26,7 +27,6 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import model.Connect;
-import model.Lösenord;
 
 public class SattInBild {
 	public static void SattIn(BufferedImage bild, String recept,
@@ -81,16 +81,16 @@ public class SattInBild {
             System.exit(1);
     }
     String server = "my.nada.kth.se";
-    String userName = Lösenord.fetchName(server);
+    String userName = FetchPassword.fetchName(server);
     JSch jsch = new JSch();
     String knownHostsFilename = "C:\\cygwin\\home\\Magnus\\.ssh\\known_hosts";
     try {
             jsch.setKnownHosts(knownHostsFilename);
             Session session = jsch.getSession(userName, server, 22);
-            String password = Lösenord.fetchPassword(server);
+            String password = FetchPassword.fetchPassword(server);
             if (password.equals("")) {
                     password = Password.lösenord(server, userName);
-                    Lösenord.putPassword(server, password);
+                    FetchPassword.putPassword(server, password);
             }
             session.setPassword(password);
             session.connect();
@@ -107,7 +107,7 @@ public class SattInBild {
                     JOptionPane.showMessageDialog(new JFrame(),
                                     "Du har matat in fel lösenord", "Fel lösenord",
                                     JOptionPane.ERROR_MESSAGE);
-                    Lösenord.putPassword(server, "");
+                    FetchPassword.putPassword(server, "");
                     laddaUppBild(image, protokoll, namn);
                     return;
             }

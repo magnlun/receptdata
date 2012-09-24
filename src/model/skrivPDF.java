@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import komponenter.FetchPassword;
 import komponenter.Password;
 
-import userInterface.receptFönstret;
+import userInterface.RecipeWindow;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -24,7 +25,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import databaskomm.SkrivUt;
-import databaskomm.Hämta;
+import databaskomm.Fetch;
 import databaskomm.LetaRecept;
 import databaskomm.FixaText;
 
@@ -77,7 +78,7 @@ public class skrivPDF implements Ruta {
 				chapters[i] = new Chapter(title1, i + 1);
 				String[][] innehall = SkrivUt.skriv(recept[i], 0);
 				PdfPTable t = new PdfPTable(2);
-				ArrayList<String[]> tabell = receptFönstret.fixToTable(SkrivUt.skriv(recept[i], 0));
+				ArrayList<String[]> tabell = RecipeWindow.fixToTable(SkrivUt.skriv(recept[i], 0));
 				
 				
 				for (int i = 1; i < tabell.size(); i++) {
@@ -85,12 +86,12 @@ public class skrivPDF implements Ruta {
 					t.addCell(tabell.get(i)[1]);
 				}
 				Paragraph line = new Paragraph(" ");
-				String[][] fetch = Hämta
-						.hämtning("SELECT \"Portioner\" FROM \"Bakverk\" WHERE \"BakNamn\" = '"
+				String[][] fetch = Fetch
+						.fetching("SELECT \"Portioner\" FROM \"Bakverk\" WHERE \"BakNamn\" = '"
 								+ recept[i] + "'");
 				String portioner = fetch[1][0];
-				String[][] bild = Hämta
-						.hämtning("SELECT \"Bild\" FROM \"Bakverk\" WHERE \"BakNamn\" = '"
+				String[][] bild = Fetch
+						.fetching("SELECT \"Bild\" FROM \"Bakverk\" WHERE \"BakNamn\" = '"
 								+ recept[i] + "'");
 				Paragraph port = new Paragraph("Portioner: " + portioner,
 						FontFactory.getFont(FontFactory.TIMES, 12));
@@ -141,16 +142,16 @@ public class skrivPDF implements Ruta {
 
 	public static void laddaUpp(String file, String target) {
 		String server = "my.nada.kth.se";
-		String userName = Lösenord.fetchName(server);
+		String userName = FetchPassword.fetchName(server);
 		JSch jsch = new JSch();
 		String knownHostsFilename = "C:\\cygwin\\home\\Magnus\\.ssh\\known_hosts";
 		try {
 			jsch.setKnownHosts(knownHostsFilename);
 			Session session = jsch.getSession(userName, server, 22);
-			String password = Lösenord.fetchPassword(server);
+			String password = FetchPassword.fetchPassword(server);
 			if (password.equals("")) {
 				password = Password.lösenord(server, userName);
-				Lösenord.putPassword(server, password);
+				FetchPassword.putPassword(server, password);
 			}
 			session.setPassword(password);
 			session.connect();
@@ -167,7 +168,7 @@ public class skrivPDF implements Ruta {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Du har matat in fel lösenord", "Fel lösenord",
 						JOptionPane.ERROR_MESSAGE);
-				Lösenord.putPassword(server, "");
+				FetchPassword.putPassword(server, "");
 				laddaUpp(file, target);
 				return;
 			}

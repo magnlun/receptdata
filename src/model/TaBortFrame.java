@@ -3,7 +3,7 @@ import javax.swing.JOptionPane;
 
 import komponenter.button;
 
-import userInterface.ReceptVäljare;
+import userInterface.RecipeChooser;
 
 
 
@@ -12,10 +12,10 @@ import databaskomm.TaBortRecept;
 
 public class TaBortFrame implements Ruta, ReceptMottagare{
 
-	ReceptVäljare rutan;
+	RecipeChooser rutan;
 	
 	public TaBortFrame(){
-		rutan = new ReceptVäljare(this);
+		rutan = new RecipeChooser(this);
 	}
 	
 	
@@ -25,7 +25,7 @@ public class TaBortFrame implements Ruta, ReceptMottagare{
 	}
 
 	@Override
-	public void taRecept(String recept, ReceptVäljare ruta) {
+	public void taRecept(String recept, RecipeChooser ruta) {
 		TaBortRecept.taBortReceptet(recept);
 		JOptionPane.showMessageDialog(rutan,"Receptet är nu borttaget.");
 		skrivPDF.skriv();
