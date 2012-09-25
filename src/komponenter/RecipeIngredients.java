@@ -18,7 +18,7 @@ public class RecipeIngredients extends JCheckBox implements ActionListener{
 	ArrayList<JCheckBox> ingredients = new ArrayList<JCheckBox>();
 	boolean klickat = false;
 	
-	RecipeIngredients(String recipe, ArrayList<String> ingredients){
+	public RecipeIngredients(String recipe, ArrayList<String> ingredients){
 		super(recipe);
 		button.setSize(11,11);
 		button.addActionListener(this);

@@ -1,10 +1,8 @@
 package model;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TreeSet;
@@ -37,23 +35,25 @@ public class ProcessRecept {
 			BufferedReader br = new BufferedReader(new FileReader(fil));
 
 			String ingrediens = br.readLine();
-			while(ingrediens != null){
+			while(ingrediens != null && !ingrediens.equals("Recept:")){
 				ingredienser.add(ingrediens);
 				ingrediens = br.readLine();
+			}
+			if(ingrediens != null && ingrediens.equals("Recept:"))
+				ingrediens = br.readLine();
+			while(ingrediens != null){
+				ArrayList<String> ingredienserna = new ArrayList<String>();
+				String recept = ingrediens;
+				ingrediens = br.readLine();
+				while(ingrediens != null && ingrediens.charAt(0) == '¤'){
+					ingredienserna.add(ingrediens);
+					ingrediens = br.readLine();
+				}
+				tree.add(new RecipeIngredients(recept, ingredienserna));
 			}
 			br.close();
 		}
 		catch(IOException e){}
-		catch(Exception err){
-			err.printStackTrace();
-		}
-		try{
-			File fil = new File("Inköp.txt");
-			BufferedWriter bw = new BufferedWriter(new FileWriter(fil));
-			for(String ingrediens : ingredienser)
-				bw.write(ingrediens + "\n");
-			bw.close();
-		}
 		catch(Exception err){
 			err.printStackTrace();
 		}

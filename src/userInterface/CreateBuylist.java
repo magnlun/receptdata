@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -38,6 +39,8 @@ public class CreateBuylist extends JFrame implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = -8291212883166537575L;
+	ArrayList<JCheckBox> ingredienser = new ArrayList<JCheckBox>();
+	ArrayList<RecipeIngredients> tree;
 	LinkedList<JCheckBox> boxar = new LinkedList<JCheckBox>();
 	JButton alltinget;
 	JButton knapp;
@@ -45,6 +48,7 @@ public class CreateBuylist extends JFrame implements ActionListener{
 	
 	public CreateBuylist(ArrayList<RecipeIngredients> tree, TreeSet<String> ingredienser){
 		setLayout(new GridBagLayout());
+		this.tree = tree;
 		GridBagConstraints g = new GridBagConstraints();
 		g.anchor = GridBagConstraints.LINE_START;
 		g.fill = GridBagConstraints.HORIZONTAL;
@@ -62,6 +66,7 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		g.gridx = 1;
 		for(String ingrediens : ingredienser){
 			boxar.add(new JCheckBox(ingrediens, true));
+			this.ingredienser.add(boxar.getLast());
 			add(boxar.getLast(), g);
 			g.gridy++;
 		}
@@ -110,6 +115,40 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		skrivPDF.laddaUpp(file, "inkopslista");
 		this.dispose();
 	}
+	
+	public void save(){
+		try{
+			File fil = new File("Inköp.txt");
+			BufferedWriter br = new BufferedWriter(new FileWriter(fil));
+
+			for(JCheckBox ingrediens : ingredienser){
+				if(ingrediens.isSelected()){
+					br.write(ingrediens.getText());
+					br.write("\n");
+				}
+			}
+			boolean printed = false;
+			for(RecipeIngredients box : tree){
+				if(!printed){
+					printed = true;
+					br.write("Recept:");
+					br.write("\n");
+				}
+				br.write(box.getText());
+				br.write("\n");
+				for(JCheckBox ingrediens : box.ingredients()){
+					br.write('¤');
+					br.write(ingrediens.getText());
+					br.write("\n");
+				}
+			}
+			br.close();
+		}
+		catch(Exception err){
+			err.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == alltinget){
@@ -117,6 +156,7 @@ public class CreateBuylist extends JFrame implements ActionListener{
 			return;
 		}
 		else if(e.getSource() == knapp){
+			save();
 			LinkedList<String> ingredienser = new LinkedList<String>();
 			for(JCheckBox box : boxar){
 				if(box.isSelected()){
