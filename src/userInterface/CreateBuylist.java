@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
@@ -15,6 +18,8 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import komponenter.RecipeIngredients;
 
 import model.skrivPDF;
 
@@ -35,26 +40,44 @@ public class CreateBuylist extends JFrame implements ActionListener{
 	private static final long serialVersionUID = -8291212883166537575L;
 	LinkedList<JCheckBox> boxar = new LinkedList<JCheckBox>();
 	JButton alltinget;
+	JButton knapp;
+	HashMap<JButton, RecipeIngredients> list = new HashMap<JButton, RecipeIngredients>();
 	
-	public CreateBuylist(TreeSet<String> ingredienser){
+	public CreateBuylist(ArrayList<RecipeIngredients> tree, TreeSet<String> ingredienser){
 		setLayout(new GridBagLayout());
 		GridBagConstraints g = new GridBagConstraints();
-		g.anchor=GridBagConstraints.LINE_START;
+		g.anchor = GridBagConstraints.LINE_START;
 		g.fill = GridBagConstraints.HORIZONTAL;
+		g.gridwidth = 2;
 		add(new JLabel("Vilka ingredienser vill du lägga till?"), g);
-		g.gridx = 1;
-		JButton knapp = new JButton("Klar");
+		g.gridwidth = 1;
+		g.gridx = 2;
+		knapp = new JButton("Klar");
 		knapp.addActionListener(this);
 		alltinget = new JButton("Markera/avmarkera alla");
 		alltinget.addActionListener(this);
 		add(knapp, g);
 		g.gridy = 1;
 		add(alltinget,g);
-		g.gridx = 0;
+		g.gridx = 1;
 		for(String ingrediens : ingredienser){
 			boxar.add(new JCheckBox(ingrediens, true));
 			add(boxar.getLast(), g);
 			g.gridy++;
+		}
+		GridBagConstraints gc = new GridBagConstraints();
+		gc.gridy = g.gridy;
+		gc.anchor = GridBagConstraints.LINE_START;
+		for(RecipeIngredients ingredients : tree){
+			gc.gridx = 0;
+			JButton button = ingredients.button();
+			button.addActionListener(this);
+			list.put(button,ingredients);
+			boxar.add(ingredients);
+			add(button,gc);
+			gc.gridx = 1;
+			add(ingredients,gc);
+			gc.gridy++;
 		}
 		pack();
 		setVisible(true);
@@ -93,22 +116,88 @@ public class CreateBuylist extends JFrame implements ActionListener{
 			markeraalltinget();
 			return;
 		}
-		LinkedList<String> ingredienser = new LinkedList<String>();
-		for(JCheckBox box : boxar){
-			if(box.isSelected()){
-				ingredienser.add(box.getText());
+		else if(e.getSource() == knapp){
+			LinkedList<String> ingredienser = new LinkedList<String>();
+			for(JCheckBox box : boxar){
+				if(box.isSelected()){
+					ingredienser.add(box.getText());
+				}
+			}
+			File fil = new File("Inköp.txt");
+			try {
+				FileWriter Write = new FileWriter(fil);
+				for(String sak : ingredienser)
+					Write.write(sak + "\n");
+				Write.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			Skapa(ingredienser);
+			return;
+		}
+		else{
+			if(list.get(e.getSource()) != null){
+				int index = 0;
+				boolean correct = false;
+				ArrayList<JCheckBox> removed = new ArrayList<JCheckBox>();
+				RecipeIngredients box = list.get(e.getSource());
+				Iterator<JCheckBox> itr = boxar.iterator();
+				while(itr.hasNext()){
+					JCheckBox boxen = itr.next();
+					if(!correct)
+						index++;
+					if(boxen == box || correct){
+						correct = true;
+						try{
+							RecipeIngredients temp = (RecipeIngredients) boxen;
+							remove(temp.button());
+						}
+						catch(Exception err){
+							//ignore	
+						}
+						remove(boxen);
+						removed.add(boxen);
+						itr.remove();
+					}
+				}
+				GridBagConstraints gc = new GridBagConstraints();
+				gc.anchor = GridBagConstraints.LINE_START;
+				gc.gridx = 1;
+				gc.gridy = index;
+				boolean addAll = box.clicked();
+				add(box, gc);
+				gc.gridx = 0;
+				add(box.button(),gc);
+				gc.gridx = 1;
+				boxar.add(box);
+				gc.gridy++;
+				if(addAll){
+					for(JCheckBox boxar : box.ingredients()){
+						add(boxar, gc);
+						gc.gridy++;
+						this.boxar.add(boxar);
+					}
+				}
+				else{
+					box.remove(removed);
+				}
+				for(int i = 1; i < removed.size(); i++){
+					add(removed.get(i), gc);
+					try{
+						gc.gridx = 0;
+						RecipeIngredients temp = (RecipeIngredients) removed.get(i);
+						add(temp.button(),gc);
+						gc.gridx = 1;
+					}
+					catch(Exception err){
+						//ignore	
+					}
+					gc.gridy++;
+					this.boxar.add(removed.get(i));
+				}
+				this.pack();
 			}
 		}
-		File fil = new File("Inköp.txt");
-		try {
-			FileWriter Write = new FileWriter(fil);
-			for(String sak : ingredienser)
-				Write.write(sak + "\n");
-			Write.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		Skapa(ingredienser);
 	}
 	public void markeraalltinget(){
 		if(boxar.get(0).isSelected())

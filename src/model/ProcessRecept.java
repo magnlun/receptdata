@@ -6,24 +6,29 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.TreeSet;
 
-import userInterface.CreateBuylist;
+import komponenter.RecipeIngredients;
 
 import databaskomm.Fetch;
 
 public class ProcessRecept {
-	public static void takeData(TreeSet<String> Recept, TreeSet<String> ingredienser){
+	public static ArrayList<RecipeIngredients> takeData(TreeSet<String> Recept, TreeSet<String> ingredienser){
+		ArrayList<RecipeIngredients> tree = new ArrayList<RecipeIngredients>();
 		for(String recept : Recept){
 			String query = "SELECT \"Ingrediens\" FROM \"Innehall\" WHERE\n" +
 					"\"BakNamn\" = '"+ recept +"';";
 			try{
 				String[][] ingrediens = Fetch.fetching(query);
-				for(int i = 1; i < ingrediens.length; i++){
-					ingredienser.add(ingrediens[i][0]);
+				String[] rc = new String[ingrediens.length-1];
+				for(int i = 0; i < rc.length; i++){
+					rc[i] = ingrediens[i+1][0];
 				}
+				tree.add(new RecipeIngredients(recept, rc));
 			}
 			catch(Throwable err){
+				err.printStackTrace();
 				continue;
 			}
 		}
@@ -52,6 +57,6 @@ public class ProcessRecept {
 		catch(Exception err){
 			err.printStackTrace();
 		}
-		new CreateBuylist(ingredienser);
+		return tree;
 	}
 }

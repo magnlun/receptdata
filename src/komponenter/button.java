@@ -3,7 +3,7 @@ package komponenter;
 import javax.swing.JButton;
 
 import userInterface.FasInput;
-import userInterface.Inköpslista;
+import userInterface.Buylist;
 import userInterface.SkrivUtKokbok;
 import userInterface.RecipeSearch;
 
@@ -20,7 +20,7 @@ public class button extends JButton {
 	private static final long serialVersionUID = 7407099534132391221L;
 	static Ruta[] list = { new FasInput(), new SkrivUtRecept(),
 			new SkrivUtKokbok(), new skrivPDF(), new RecipeSearch(),
-			new TaBortFrame(), new LaggTillBild(), new Inköpslista() };
+			new TaBortFrame(), new LaggTillBild(), new Buylist() };
 	int index;
 
 	public button(String text, int index) {
