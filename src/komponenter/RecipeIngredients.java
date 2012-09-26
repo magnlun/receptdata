@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 
-public class RecipeIngredients extends JCheckBox implements ActionListener{
+public class RecipeIngredients extends JCheckBox implements ActionListener, Comparable<RecipeIngredients>{
 	/**
 	 * 
 	 */
@@ -70,5 +70,10 @@ public class RecipeIngredients extends JCheckBox implements ActionListener{
 	
 	public ArrayList<JCheckBox> ingredients(){
 		return ingredients;
+	}
+
+	@Override
+	public int compareTo(RecipeIngredients o) {
+		return getText().compareTo(o.getText());
 	}
 }

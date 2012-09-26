@@ -76,6 +76,12 @@ public class skrivPDF implements Ruta {
 						FontFactory.getFont(FontFactory.HELVETICA, 18,
 								Font.ITALIC));
 				chapters[i] = new Chapter(title1, i + 1);
+				Paragraph test = new Paragraph("2",
+						FontFactory.getFont(FontFactory.TIMES, FontFactory.defaultEncoding, true, 1, 1, BaseColor.WHITE));
+				Anchor anchor = new Anchor("2");
+				anchor.setName(recept[i].replace("  ", ""));
+				test.add(anchor);
+				chapters[i].add(test);
 				String[][] innehall = SkrivUt.skriv(recept[i], 0);
 				PdfPTable t = new PdfPTable(2);
 				ArrayList<String[]> tabell = RecipeWindow.fixToTable(SkrivUt.skriv(recept[i], 0));

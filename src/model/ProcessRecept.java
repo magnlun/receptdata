@@ -12,8 +12,8 @@ import komponenter.RecipeIngredients;
 import databaskomm.Fetch;
 
 public class ProcessRecept {
-	public static ArrayList<RecipeIngredients> takeData(TreeSet<String> Recept, TreeSet<String> ingredienser){
-		ArrayList<RecipeIngredients> tree = new ArrayList<RecipeIngredients>();
+	public static TreeSet<RecipeIngredients> takeData(TreeSet<String> Recept, TreeSet<String> ingredienser){
+		TreeSet<RecipeIngredients> tree = new TreeSet<RecipeIngredients>();
 		for(String recept : Recept){
 			String query = "SELECT \"Ingrediens\" FROM \"Innehall\" WHERE\n" +
 					"\"BakNamn\" = '"+ recept +"';";
@@ -35,12 +35,6 @@ public class ProcessRecept {
 			BufferedReader br = new BufferedReader(new FileReader(fil));
 
 			String ingrediens = br.readLine();
-			while(ingrediens != null && !ingrediens.equals("Recept:")){
-				ingredienser.add(ingrediens);
-				ingrediens = br.readLine();
-			}
-			if(ingrediens != null && ingrediens.equals("Recept:"))
-				ingrediens = br.readLine();
 			while(ingrediens != null){
 				ArrayList<String> ingredienserna = new ArrayList<String>();
 				String recept = ingrediens;
@@ -52,6 +46,11 @@ public class ProcessRecept {
 				tree.add(new RecipeIngredients(recept, ingredienserna));
 			}
 			br.close();
+			ArrayList<String> temp = new ArrayList<String>();
+			for(String ingrediensen : ingredienser){
+				temp.add(ingrediensen);
+			}
+			tree.add(new RecipeIngredients("Övrigt",temp));
 		}
 		catch(IOException e){}
 		catch(Exception err){

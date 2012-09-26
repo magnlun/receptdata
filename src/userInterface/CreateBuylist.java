@@ -22,6 +22,7 @@ import komponenter.RecipeIngredients;
 
 import model.skrivPDF;
 
+import com.itextpdf.text.Anchor;
 import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -37,14 +38,13 @@ public class CreateBuylist extends JFrame implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = -8291212883166537575L;
-	ArrayList<JCheckBox> ingredienser = new ArrayList<JCheckBox>();
-	ArrayList<RecipeIngredients> tree;
+	TreeSet<RecipeIngredients> tree;
 	LinkedList<JCheckBox> boxar = new LinkedList<JCheckBox>();
 	JButton alltinget;
 	JButton knapp;
 	HashMap<JButton, RecipeIngredients> list = new HashMap<JButton, RecipeIngredients>();
 	
-	public CreateBuylist(ArrayList<RecipeIngredients> tree, TreeSet<String> ingredienser){
+	public CreateBuylist(TreeSet<RecipeIngredients> tree){
 		setLayout(new GridBagLayout());
 		this.tree = tree;
 		GridBagConstraints g = new GridBagConstraints();
@@ -62,12 +62,6 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		g.gridy = 1;
 		add(alltinget,g);
 		g.gridx = 1;
-		for(String ingrediens : ingredienser){
-			boxar.add(new JCheckBox(ingrediens, true));
-			this.ingredienser.add(boxar.getLast());
-			add(boxar.getLast(), g);
-			g.gridy++;
-		}
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridy = g.gridy;
 		gc.anchor = GridBagConstraints.LINE_START;
@@ -99,6 +93,12 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		titel.setAlignment(Paragraph.ALIGN_CENTER);
 		Chapter title = new Chapter(titel, 0);
 		title.setNumberDepth(0);
+		Anchor anchorTarget = new Anchor("This is the target of the link above");
+        anchorTarget.setName("linkTarget");
+        Paragraph test = new Paragraph("temptext",
+				FontFactory.getFont(FontFactory.TIMES, 12));
+        test.add(anchorTarget);
+        title.add(test);
 		for(String ingrediens : ingredienser){
 			Paragraph tjo = new Paragraph(ingrediens,
 					FontFactory.getFont(FontFactory.TIMES, 12));
@@ -119,29 +119,20 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		try{
 			File fil = new File("Inköp.txt");
 			FileWriter br = new FileWriter(fil);
-
-			for(JCheckBox ingrediens : ingredienser){
-				if(ingrediens.isSelected()){
-					br.write(ingrediens.getText());
-					br.write("\n");
-					rc.add(ingrediens.getText());
-				}
-			}
-			boolean printed = false;
 			for(RecipeIngredients box : tree){
-				if(box.isSelected()){
-					String utskrift = "";
-					if(!printed){
-						printed = true;
-						utskrift = "Recept:\n";
+				boolean checked = false;
+				String utskrift = "";
+				for(JCheckBox boxen : box.ingredients()){
+					if(boxen.isSelected()){
+						if(!checked){
+							checked = true;
+							utskrift += box.getText() + "\n";
+						}
+						utskrift += "¤" + boxen.getText() + "\n";
+						rc.add(boxen.getText());
 					}
-					utskrift += box.getText() + "\n";
-					for(JCheckBox ingrediens : box.ingredients()){
-						utskrift += "¤" + ingrediens.getText() + "\n";
-						rc.add(ingrediens.getText());
-					}
-					br.write(utskrift);
 				}
+				br.write(utskrift);
 			}
 			br.close();
 		}
@@ -159,11 +150,6 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		}
 		else if(e.getSource() == knapp){
 			LinkedList<String> ingredienser = save();
-			for(JCheckBox box : boxar){
-				if(box.isSelected()){
-					ingredienser.add(box.getText());
-				}
-			}
 			Skapa(ingredienser);
 			return;
 		}

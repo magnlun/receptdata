@@ -11,18 +11,17 @@ public class SkrivUt {
 		float portion = 1;
 		if (portioner != 0)
 			portion = Integer.parseInt(temp[1][0]) / (float) portioner;
-		query = "SELECT  \"Innehall\".\"Ingrediens\", \"Innehall\".\"Volym\", \"Alternativ\".\"AltIngrediens\", \"Alternativ\".\"Volym\",  \"Instruktioner\", \"Innehall\".\"Fas\"" +
-				" FROM \"Innehall\" " +
-				"NATURAL JOIN \"Bakverk\" " +
-				"LEFT JOIN \"Alternativ\" " +
-				"ON \"Innehall\".\"Ingrediens\" = \"Alternativ\".\"Ingrediens\" " +
-				"AND \"Innehall\".\"BakNamn\" = \"Alternativ\".\"Recept\" " +
-				"AND \"Innehall\".\"Fas\" = \"Alternativ\".\"Fas\" " +
-				"WHERE \"Innehall\".\"BakNamn\" = '"
-				+ recept + "';";
+		query = "SELECT \"Innehall\".\"Ingrediens\", \"Innehall\".\"Volym\", \"Alternativ\".\"AltIngrediens\", \"Alternativ\".\"Volym\", \"Instruktioner\", \"Innehall\".\"Fas\""
+				+ " FROM \"Innehall\" "
+				+ "NATURAL JOIN \"Bakverk\" "
+				+ "LEFT JOIN \"Alternativ\" "
+				+ "ON \"Innehall\".\"Ingrediens\" = \"Alternativ\".\"Ingrediens\" "
+				+ "AND \"Innehall\".\"BakNamn\" = \"Alternativ\".\"Recept\" "
+				+ "AND \"Innehall\".\"Fas\" = \"Alternativ\".\"Fas\" "
+				+ "WHERE \"Innehall\".\"BakNamn\" = '" + recept + "';";
 		String[][] rc = Fetch.fetching(query);
 		if (rc.length < 2) {
-			System.out.println("Tyvärr hittade jag inte det där");
+			System.err.println("Tyvärr hittade jag inte det där");
 			return null;
 		}
 		for (int i = 1; i < rc.length; i++) {
