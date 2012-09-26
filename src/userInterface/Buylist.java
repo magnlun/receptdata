@@ -65,7 +65,6 @@ public class Buylist extends JFrame implements Ruta, ActionListener, DocumentLis
 				if(ingredienser.get(i).getText().length() > 0)
 					ingredienserText.add(ingredienser.get(i).getText());
 			ArrayList<RecipeIngredients> tree = ProcessRecept.takeData(recept, ingredienserText);
-			System.out.println(tree.size());
 			new CreateBuylist(tree,ingredienserText);
 			button.changeList(new Buylist());
 		}

@@ -114,7 +114,8 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		this.dispose();
 	}
 	
-	public void save(){
+	public LinkedList<String> save(){
+		LinkedList<String> rc = new LinkedList<String>();
 		try{
 			File fil = new File("Inköp.txt");
 			FileWriter br = new FileWriter(fil);
@@ -123,6 +124,7 @@ public class CreateBuylist extends JFrame implements ActionListener{
 				if(ingrediens.isSelected()){
 					br.write(ingrediens.getText());
 					br.write("\n");
+					rc.add(ingrediens.getText());
 				}
 			}
 			boolean printed = false;
@@ -136,6 +138,7 @@ public class CreateBuylist extends JFrame implements ActionListener{
 					utskrift += box.getText() + "\n";
 					for(JCheckBox ingrediens : box.ingredients()){
 						utskrift += "¤" + ingrediens.getText() + "\n";
+						rc.add(ingrediens.getText());
 					}
 					br.write(utskrift);
 				}
@@ -145,6 +148,7 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		catch(Exception err){
 			err.printStackTrace();
 		}
+		return rc;
 	}
 	
 	@Override
@@ -154,8 +158,7 @@ public class CreateBuylist extends JFrame implements ActionListener{
 			return;
 		}
 		else if(e.getSource() == knapp){
-			save();
-			LinkedList<String> ingredienser = new LinkedList<String>();
+			LinkedList<String> ingredienser = save();
 			for(JCheckBox box : boxar){
 				if(box.isSelected()){
 					ingredienser.add(box.getText());
