@@ -46,7 +46,7 @@ public class ProcessRecept {
 				String recept = ingrediens;
 				ingrediens = br.readLine();
 				while(ingrediens != null && ingrediens.charAt(0) == '¤'){
-					ingredienserna.add(ingrediens);
+					ingredienserna.add(ingrediens.substring(1));
 					ingrediens = br.readLine();
 				}
 				tree.add(new RecipeIngredients(recept, ingredienserna));

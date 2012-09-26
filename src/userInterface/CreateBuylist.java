@@ -4,11 +4,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -119,7 +117,7 @@ public class CreateBuylist extends JFrame implements ActionListener{
 	public void save(){
 		try{
 			File fil = new File("Inköp.txt");
-			BufferedWriter br = new BufferedWriter(new FileWriter(fil));
+			FileWriter br = new FileWriter(fil);
 
 			for(JCheckBox ingrediens : ingredienser){
 				if(ingrediens.isSelected()){
@@ -129,17 +127,17 @@ public class CreateBuylist extends JFrame implements ActionListener{
 			}
 			boolean printed = false;
 			for(RecipeIngredients box : tree){
-				if(!printed){
-					printed = true;
-					br.write("Recept:");
-					br.write("\n");
-				}
-				br.write(box.getText());
-				br.write("\n");
-				for(JCheckBox ingrediens : box.ingredients()){
-					br.write('¤');
-					br.write(ingrediens.getText());
-					br.write("\n");
+				if(box.isSelected()){
+					String utskrift = "";
+					if(!printed){
+						printed = true;
+						utskrift = "Recept:\n";
+					}
+					utskrift += box.getText() + "\n";
+					for(JCheckBox ingrediens : box.ingredients()){
+						utskrift += "¤" + ingrediens.getText() + "\n";
+					}
+					br.write(utskrift);
 				}
 			}
 			br.close();
@@ -162,15 +160,6 @@ public class CreateBuylist extends JFrame implements ActionListener{
 				if(box.isSelected()){
 					ingredienser.add(box.getText());
 				}
-			}
-			File fil = new File("Inköp.txt");
-			try {
-				FileWriter Write = new FileWriter(fil);
-				for(String sak : ingredienser)
-					Write.write(sak + "\n");
-				Write.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
 			}
 			Skapa(ingredienser);
 			return;
