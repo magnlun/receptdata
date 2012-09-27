@@ -91,8 +91,9 @@ public class RecipeSearch extends JFrame implements ActionListener, Ruta{
 				Kategori.addItem("Valfri");
 				try {
 					String[][] kategorier = Fetch.fetching("SELECT * FROM \"Kategorier\";");
-					for(int i = 1; i < kategorier.length; i++)
-						Kategori.addItem(kategorier[i][0].replace("  ", ""));
+					for(int i = 1; i < kategorier.length; i++){
+						Kategori.addItem(kategorier[i][0]);
+					}
 				} catch (SQLException e) {
 					e.printStackTrace();
 					System.exit(ABORT);

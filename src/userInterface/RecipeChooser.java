@@ -105,7 +105,7 @@ public class RecipeChooser extends JFrame implements DocumentListener, ActionLis
 		recept = LetaRecept.Recept(inmatning.getText());
 		receptLista.removeAllItems();
 		for(int i = 0; i < recept.length; i++){
-			receptLista.addItem(recept[i].replace("  ", " "));
+			receptLista.addItem(recept[i]);
 		}
 		receptLista.addActionListener(this);
 		

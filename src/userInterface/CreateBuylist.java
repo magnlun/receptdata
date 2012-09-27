@@ -79,7 +79,7 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		pack();
 		setVisible(true);
 	}
-	public void Skapa(LinkedList<String> ingredienser){
+	public void Skapa(HashMap<String,LinkedList<String>> ingredienser){
 		String file = "C:\\Users\\Magnus\\Documents\\inkopslista.pdf";
 		Document document = new Document(PageSize.A4, 50, 50, 50, 50);
 		try {
@@ -93,17 +93,25 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		titel.setAlignment(Paragraph.ALIGN_CENTER);
 		Chapter title = new Chapter(titel, 0);
 		title.setNumberDepth(0);
-		Anchor anchorTarget = new Anchor("This is the target of the link above");
-        anchorTarget.setName("linkTarget");
-        Paragraph test = new Paragraph("temptext",
+		Iterator<String> itr = ingredienser.keySet().iterator();
+		Paragraph list = new Paragraph("",
 				FontFactory.getFont(FontFactory.TIMES, 12));
-        test.add(anchorTarget);
-        title.add(test);
-		for(String ingrediens : ingredienser){
-			Paragraph tjo = new Paragraph(ingrediens,
-					FontFactory.getFont(FontFactory.TIMES, 12));
-			title.add(tjo);
+		while(itr.hasNext()){
+			String recept = itr.next();
+			LinkedList<String> ingred = ingredienser.get(recept);
+			Anchor link = new Anchor(recept);
+			link.setReference("www.nada.kth.se/~magnlun/kokbok.pdf#"+recept.replace("å", "a").replace("ä", "a").replace("ö","o"));
+			list.add(link);
+			list.add("\n");
+			int i = 0;
+			for(String ingrediens : ingred){
+				i++;
+				list.add("   " + i + ". " + ingrediens);
+				list.add("\n");
+			}
+			
 		}
+		title.add(list);
 		try {
 			document.add(title);
 		} catch (DocumentException e) {
@@ -114,8 +122,8 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		this.dispose();
 	}
 	
-	public LinkedList<String> save(){
-		LinkedList<String> rc = new LinkedList<String>();
+	public HashMap<String,LinkedList<String>> save(){
+		HashMap<String,LinkedList<String>> rc = new HashMap<String,LinkedList<String>>();
 		try{
 			File fil = new File("Inköp.txt");
 			FileWriter br = new FileWriter(fil);
@@ -127,9 +135,10 @@ public class CreateBuylist extends JFrame implements ActionListener{
 						if(!checked){
 							checked = true;
 							utskrift += box.getText() + "\n";
+							rc.put(box.getText(), new LinkedList<String>());
 						}
 						utskrift += "¤" + boxen.getText() + "\n";
-						rc.add(boxen.getText());
+						rc.get(box.getText()).add(boxen.getText());
 					}
 				}
 				br.write(utskrift);
@@ -149,7 +158,7 @@ public class CreateBuylist extends JFrame implements ActionListener{
 			return;
 		}
 		else if(e.getSource() == knapp){
-			LinkedList<String> ingredienser = save();
+			HashMap<String, LinkedList<String>> ingredienser = save();
 			Skapa(ingredienser);
 			return;
 		}

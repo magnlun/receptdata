@@ -23,8 +23,12 @@ public class RecipeIngredients extends JCheckBox implements ActionListener, Comp
 		button.setSize(11,11);
 		button.addActionListener(this);
 		this.addActionListener(this);
-		for(String ingrediens : ingredients)
+		for(String ingrediens : ingredients){
 			this.ingredients.add(new JCheckBox(ingrediens));
+			this.ingredients.get(this.ingredients.size() - 1).setSelected(true);
+		}
+		setSelected(true);
+			
 	}
 	
 	public RecipeIngredients(String recipe, String[] ingredients){

@@ -65,7 +65,7 @@ public class SkrivUtAllt implements Printable {
 			Font font = new Font("Monospaced", 0, 12);
 			graphics.setFont(font);
 			for (int j = 0; j < recept.length; j++) {
-				String Line = recept[j].replace("  ", "");
+				String Line = recept[j];
 				for (int k = Line.length(); k < 50; k++) {
 					Line += ".";
 				}

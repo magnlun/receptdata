@@ -46,6 +46,11 @@ public class Fetch {
 		int i = 0;
 		while ((row = rows.poll()) != null)
 			rc[i++] = row;
+		for(int k = 0; k < rc.length; k++){
+			for(int j = 0; j < rc[k].length; j++)
+				if(rc[k][j] != null)
+					rc[k][j] = rc[k][j].trim();
+		}
 		return rc;
 	}
 }

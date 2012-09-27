@@ -72,16 +72,10 @@ public class skrivPDF implements Ruta {
 		Chapter[] chapters = new Chapter[recept.length];
 		while (i < recept.length) {
 			try {
-				Paragraph title1 = new Paragraph(recept[i].replace("  ", ""),
+				Paragraph title1 = new Paragraph(recept[i],
 						FontFactory.getFont(FontFactory.HELVETICA, 18,
 								Font.ITALIC));
 				chapters[i] = new Chapter(title1, i + 1);
-				Paragraph test = new Paragraph("2",
-						FontFactory.getFont(FontFactory.TIMES, FontFactory.defaultEncoding, true, 1, 1, BaseColor.WHITE));
-				Anchor anchor = new Anchor("2");
-				anchor.setName(recept[i].replace("  ", ""));
-				test.add(anchor);
-				chapters[i].add(test);
 				String[][] innehall = SkrivUt.skriv(recept[i], 0);
 				PdfPTable t = new PdfPTable(2);
 				ArrayList<String[]> tabell = RecipeWindow.fixToTable(SkrivUt.skriv(recept[i], 0));
@@ -99,8 +93,12 @@ public class skrivPDF implements Ruta {
 				String[][] bild = Fetch
 						.fetching("SELECT \"Bild\" FROM \"Bakverk\" WHERE \"BakNamn\" = '"
 								+ recept[i] + "'");
-				Paragraph port = new Paragraph("Portioner: " + portioner,
+				Paragraph port = new Paragraph("",
 						FontFactory.getFont(FontFactory.TIMES, 12));
+
+				Anchor anchor = new Anchor("Portioner: " + portioner);
+				anchor.setName(recept[i].replace("å", "a").replace("ä", "a").replace("ö","o"));
+				port.add(anchor);
 				if (bild[1][0] != null) {
 					Image image2 = Image.getInstance(new URL(
 							"http://www.nada.kth.se/~magnlun/Bilder/"
@@ -110,10 +108,8 @@ public class skrivPDF implements Ruta {
 				}
 				chapters[i].add(port);
 				chapters[i].add(line);
-				chapters[i].add(line);
-				chapters[i].add(line);
 				chapters[i].add(t);
-				String temp2 = FixaText.fixaTexten(innehall[1][4].replace("  ",""));
+				String temp2 = FixaText.fixaTexten(innehall[1][4]);
 				String ut = "\n";
 				for (int i = 0; i < temp2.length() - 1; i++) {
 					if (temp2.charAt(i) == '\n') {

@@ -26,7 +26,7 @@ public class Lista extends ArrayList<DropDownList> {
 					.fetching("SELECT * FROM \"Kategorier\";");
 			for (int i = 1; i < kategorier.length; i++)
 
-				this.kategorier.add(kategorier[i][0].replace("  ", ""));
+				this.kategorier.add(kategorier[i][0]);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

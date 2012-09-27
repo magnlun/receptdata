@@ -51,7 +51,7 @@ public class RecipeWindow extends JFrame implements
 		this.setTitle(recept);
 		
 		instruktioner = new JTextArea();
-		instruktioner.setText(FixaText.fixaTexten(innehall[1][4].replace("  ","")));
+		instruktioner.setText(FixaText.fixaTexten(innehall[1][4]));
 		instruktionsPane = new JScrollPane(instruktioner);
 		this.innehall = new JTable(ingredienser.size() - 1, 2);
 		this.innehall.getColumnModel().getColumn(0).setHeaderValue(ingredienser.get(1)[0]);
@@ -77,7 +77,7 @@ public class RecipeWindow extends JFrame implements
 		Dimension size = this.getSize();
 		instruktionsPane.setSize(new Dimension(500, (int) (size.getHeight() - 90)));
 		setVisible(visible);
-		String Line = innehall[1][4].replace("  ","");
+		String Line = innehall[1][4];
 		String[] Lines = Line.split("\n");
 		ArrayList<String> tabell = uträkning();
 		int rader = tabell.size();
@@ -130,18 +130,18 @@ public class RecipeWindow extends JFrame implements
 				Faser.add(innehall[i][innehall[i].length-1]);
 		}
 		for(String fas : Faser){
-			if(!fas.replace("  ", "").equals("")){
-				ingredienser.add(new String[] {fas.replace("  ", "") + ":",""});
+			if(!fas.equals("")){
+				ingredienser.add(new String[] {fas + ":",""});
 			}
 			for (int j = 0; j < innehall.length; j++) {
 				String fasen = innehall[j][innehall[j].length-1];
 				if((fasen != null) && fasen.equals(fas)){
-					ingredienser.add(new String[] { innehall[j][0].replace("  ", ""),
-							innehall[j][1].replace("  ", "") });
+					ingredienser.add(new String[] { innehall[j][0],
+							innehall[j][1] });
 					if (innehall[j][2] != null && j > 1) {
 						ingredienser.add(new String[] { "eller", "" });
-						ingredienser.add(new String[] { innehall[j][2].replace("  ", ""),
-								innehall[j][3].replace("  ", "") });
+						ingredienser.add(new String[] { innehall[j][2],
+								innehall[j][3] });
 					}
 				}
 			}
