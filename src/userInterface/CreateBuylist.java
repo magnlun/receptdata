@@ -39,7 +39,6 @@ public class CreateBuylist extends JFrame implements ActionListener{
 	 */
 	private static final long serialVersionUID = -8291212883166537575L;
 	TreeSet<RecipeIngredients> tree;
-	LinkedList<JCheckBox> boxar = new LinkedList<JCheckBox>();
 	JButton alltinget;
 	JButton knapp;
 	HashMap<JButton, RecipeIngredients> list = new HashMap<JButton, RecipeIngredients>();
@@ -66,15 +65,9 @@ public class CreateBuylist extends JFrame implements ActionListener{
 		gc.gridy = g.gridy;
 		gc.anchor = GridBagConstraints.LINE_START;
 		for(RecipeIngredients ingredients : tree){
-			gc.gridx = 0;
-			JButton button = ingredients.button();
-			button.addActionListener(this);
-			list.put(button,ingredients);
-			boxar.add(ingredients);
-			add(button,gc);
-			gc.gridx = 1;
-			add(ingredients,gc);
-			gc.gridy++;
+			ingredients.add(this, gc);
+			ingredients.button().addActionListener(this);
+			list.put(ingredients.button(), ingredients);
 		}
 		pack();
 		setVisible(true);
@@ -166,73 +159,41 @@ public class CreateBuylist extends JFrame implements ActionListener{
 			if(list.get(e.getSource()) != null){
 				int index = 0;
 				boolean correct = false;
-				ArrayList<JCheckBox> removed = new ArrayList<JCheckBox>();
+				ArrayList<RecipeIngredients> removed = new ArrayList<RecipeIngredients>();
 				RecipeIngredients box = list.get(e.getSource());
-				Iterator<JCheckBox> itr = boxar.iterator();
+				Iterator<RecipeIngredients> itr = tree.iterator();
 				while(itr.hasNext()){
-					JCheckBox boxen = itr.next();
+					RecipeIngredients boxen = itr.next();
 					if(!correct)
-						index++;
+						if(boxen != box)
+							index += boxen.length();
+						else
+							index++;
 					if(boxen == box || correct){
 						correct = true;
-						try{
-							RecipeIngredients temp = (RecipeIngredients) boxen;
-							remove(temp.button());
-						}
-						catch(Exception err){
-							//ignore	
-						}
-						remove(boxen);
+						boxen.remove(this);
 						removed.add(boxen);
-						itr.remove();
 					}
 				}
+				box.clicked();
 				GridBagConstraints gc = new GridBagConstraints();
 				gc.anchor = GridBagConstraints.LINE_START;
 				gc.gridx = 1;
 				gc.gridy = index;
-				boolean addAll = box.clicked();
-				add(box, gc);
-				gc.gridx = 0;
-				add(box.button(),gc);
-				gc.gridx = 1;
-				boxar.add(box);
-				gc.gridy++;
-				if(addAll){
-					for(JCheckBox boxar : box.ingredients()){
-						add(boxar, gc);
-						gc.gridy++;
-						this.boxar.add(boxar);
-					}
-				}
-				else{
-					box.remove(removed);
-				}
+				box.add(this, gc);
 				for(int i = 1; i < removed.size(); i++){
-					add(removed.get(i), gc);
-					try{
-						gc.gridx = 0;
-						RecipeIngredients temp = (RecipeIngredients) removed.get(i);
-						add(temp.button(),gc);
-						gc.gridx = 1;
-					}
-					catch(Exception err){
-						//ignore	
-					}
-					gc.gridy++;
-					this.boxar.add(removed.get(i));
+					gc = removed.get(i).add(this, gc);
 				}
 				this.pack();
 			}
 		}
 	}
 	public void markeraalltinget(){
-		if(boxar.get(0).isSelected())
-			for(JCheckBox box : boxar)
-				box.setSelected(false);
-		else
-			for(JCheckBox box : boxar)
-				box.setSelected(true);
-			
+		Iterator<RecipeIngredients> itr = tree.iterator();
+		RecipeIngredients first = itr.next();
+		while(itr.hasNext()){
+			itr.next().setSelected(!first.isSelected());
+		}
+		first.setSelected(!first.isSelected());
 	}
 }
