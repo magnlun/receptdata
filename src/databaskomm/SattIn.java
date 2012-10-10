@@ -89,7 +89,6 @@ public class SattIn {
 			}
 		}
 		return true;
-
 	}
 
 	public static boolean kommunikationRecept(String query, String recept,
@@ -112,6 +111,21 @@ public class SattIn {
 			}
 		}
 	}
+	
+	public static void insertIngrediens(String ingrediens, JFrame window){
+		String query =
+				"INSERT INTO \"Ingredienser\"(\"Ingrediens\") VALUES ('"
+						+ ingrediens 
+						+ "');";
+		Connection conn = Connect.getConnection("Databas");
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(query);
+			pstmt.executeUpdate();
+		}
+		catch(Exception err){
+			err.printStackTrace();
+		}
+	}
 
 	public static void kommunikation(String query, String ingrediens,
 			JFrame window) throws SQLException {
@@ -128,17 +142,10 @@ public class SattIn {
 				kommunikation(query, Alias[1][0], window);
 			} else {
 				int n = JOptionPane.showConfirmDialog(window, "Ingrediensen "
-						+ ingrediens + " finns inte, vill du lägga till den?",
+						+ ingrediens + " finns inte, vill du l�gga till den?",
 						"Krock!", JOptionPane.YES_NO_OPTION);
 				if (n == 0) {
-					kommunikation(
-							"INSERT INTO \"Ingredienser\"(\"Ingrediens\", \"Viktig\", \"Hemma\", \"Önskad mängd\", \"Framtida behov\") VALUES ('"
-									+ ingrediens
-									+ "','"
-									+ "FALSE"
-									+ "','"
-									+ 0
-									+ "','" + 0 + "','" + 0 + "');", "", window);
+					insertIngrediens(ingrediens, window);
 					kommunikation(query, ingrediens, window);
 				}
 			}

@@ -16,7 +16,7 @@ public class RecipeIngredients extends JCheckBox implements ActionListener, Comp
 	 */
 	private static final long serialVersionUID = -7151577439756413043L;
 	
-	JButton button = new JButton(new ImageIcon("Images/plus.png"));
+	JButton button = new JButton(new ImageIcon("Images/Plus.png"));
 	ArrayList<JCheckBox> ingredients = new ArrayList<JCheckBox>();
 	boolean klickat = false;
 	
@@ -83,9 +83,9 @@ public class RecipeIngredients extends JCheckBox implements ActionListener, Comp
 
 	public boolean clicked(){
 		if(!klickat)
-			button.setIcon(new ImageIcon("Images/minus.png"));
+			button.setIcon(new ImageIcon("Images/Minus.png"));
 		else
-			button.setIcon(new ImageIcon("Images/plus.png"));
+			button.setIcon(new ImageIcon("Images/Plus.png"));
 		klickat = !klickat;
 		return klickat;
 	}
